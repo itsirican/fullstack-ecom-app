@@ -1,30 +1,34 @@
 import { Grid } from "@chakra-ui/react";
 import ProductCart from "../components/ProductCart";
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { IProduct } from "../interface";
+import { useQuery } from "@tanstack/react-query";
 
 const Products = () => {
-  const [productList, setProductList] = useState([]);
+  const getProductList = async () => {
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_SERVER_URL}/api/products?populate=thumbnail,category`
+    );
 
-  useEffect(() => {
-    axios
-      .get(
-        `${import.meta.env.VITE_SERVER_URL}/api/products?populate=thumbnail,category`
-      )
-      .then((res) => setProductList(res.data.data))
-      .catch((err) => console.log(err));
-  }, []);
+    return data;
+  };
 
-  // console.log(productList);
+  const { isLoading, data } = useQuery({
+    queryKey: ["products"],
+    queryFn: () => getProductList(),
+  });
+
+  if (isLoading) return <h3>Loading...</h3>;
+
   return (
     <Grid
       margin={30}
       templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"}
       gap={6}
     >
-      {productList.map((product, idx) => (
-        <ProductCart key={idx} {...product} />
-      ))}
+      {data.data.map((product: IProduct) => {
+        return <ProductCart key={product.id} product={product} />;
+      })}
     </Grid>
   );
 };

@@ -9,16 +9,20 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import { IProduct } from "../interface";
 
-const ProductCart = ({ attributes }) => {
-  // const { attributes } = product;
-  console.log(attributes?.thumbnail?.data?.attributes?.url);
+interface IProps {
+  product: IProduct;
+}
+
+const ProductCart = ({ product }: IProps) => {
+  const { title, description, price, thumbnail } = product.attributes;
   const { colorMode } = useColorMode();
   return (
     <Card border={"1px solid #a8b5c8"} bg={"none"}>
       <CardBody>
         <Image
-          src={`${import.meta.env.VITE_SERVER_URL}${attributes?.thumbnail?.data?.attributes?.url}`}
+          src={`${import.meta.env.VITE_SERVER_URL}${thumbnail?.data?.attributes?.url}`}
           alt="Green double couch with wooden legs"
           boxSize={"200px"}
           borderRadius={"full"}
@@ -27,11 +31,11 @@ const ProductCart = ({ attributes }) => {
         />
         <Stack mt="6" spacing="3">
           <Heading size="md" textAlign={"center"} mb={2}>
-            {attributes.title}
+            {title}
           </Heading>
-          <Text fontSize={"large"}>{attributes.description}</Text>
+          <Text fontSize={"large"}>{description}</Text>
           <Text color="blue.600" fontSize="3xl" textAlign={"center"}>
-            ${attributes.price}
+            ${price}
           </Text>
           <Button
             as={Link}
