@@ -52,11 +52,11 @@ export default function Navbar() {
             {Links && Links.map((link) => <NavLink key={link}>{link}</NavLink>)}
           </HStack>
           <Flex alignItems={"center"}>
-            <Stack direction={"row"} spacing={7}>
+            <Stack direction={"row"} alignItems={"center"} spacing={7}>
               <Button onClick={toggleColorMode}>
                 {colorMode === "light" ? <BsMoon /> : <BsSun />}
               </Button>
-
+              <RouterLink to={"/login"}>Login</RouterLink>
               <Menu>
                 <MenuButton
                   as={Button}
