@@ -12,11 +12,7 @@ const Products = () => {
 
   if (isLoading)
     return (
-      <Grid
-        margin={30}
-        templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"}
-        gap={6}
-      >
+      <Grid templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"} gap={6}>
         {Array.from({ length: 10 }, (_, idx) => (
           <ProductCardSkeleton key={idx} />
         ))}
@@ -24,11 +20,7 @@ const Products = () => {
     );
 
   return (
-    <Grid
-      margin={30}
-      templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"}
-      gap={6}
-    >
+    <Grid templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"} gap={6}>
       {data.data.map((product: IProduct) => {
         return <ProductCart key={product.id} product={product} />;
       })}
