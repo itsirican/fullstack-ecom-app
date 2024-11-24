@@ -1,24 +1,27 @@
 import { Grid } from "@chakra-ui/react";
 import ProductCart from "../components/ProductCart";
-import axios from "axios";
 import { IProduct } from "../interface";
-import { useQuery } from "@tanstack/react-query";
+import useCustomQuery from "../hooks/useCustomQuery";
+import ProductCardSkeleton from "../components/ProductCardSkeleton";
 
 const Products = () => {
-  const getProductList = async () => {
-    const { data } = await axios.get(
-      `${import.meta.env.VITE_SERVER_URL}/api/products?populate=thumbnail,category`
-    );
-
-    return data;
-  };
-
-  const { isLoading, data } = useQuery({
+  const { isLoading, data } = useCustomQuery({
     queryKey: ["products"],
-    queryFn: () => getProductList(),
+    url: "/api/products?populate=thumbnail,category",
   });
 
-  if (isLoading) return <h3>Loading...</h3>;
+  if (isLoading)
+    return (
+      <Grid
+        margin={30}
+        templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"}
+        gap={6}
+      >
+        {Array.from({ length: 10 }, (_, idx) => (
+          <ProductCardSkeleton key={idx} />
+        ))}
+      </Grid>
+    );
 
   return (
     <Grid
