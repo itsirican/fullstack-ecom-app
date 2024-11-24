@@ -13,3 +13,13 @@ export interface IProduct {
     };
   };
 }
+
+export interface ILoginInput {
+  name: string;
+  type: string;
+  placeholder: string;
+  validation: {
+    required: boolean;
+    pattern?: RegExp;
+  };
+}

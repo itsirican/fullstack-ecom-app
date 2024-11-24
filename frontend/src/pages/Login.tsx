@@ -12,33 +12,33 @@ import {
   useColorModeValue,
   InputGroup,
   InputRightElement,
+  FormErrorMessage,
 } from "@chakra-ui/react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { loginSchema } from "../validation";
+import { LOGIN_FORM } from "../data";
 
-interface IFormInputs {
-  email: string;
+interface IFormInput {
+  identifier: string;
   password: string;
 }
 
 export default function SimpleCard() {
-  const [showPassword, setShowPassword] = useState(false);
-  // const [isEmail, setIsEmail] = useState(false);
-  // const [isPassword, setIsPassword] = useState(false);
-  const [user, setUser] = useState<IFormInputs>({
-    email: "",
-    password: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInput>({
+    resolver: yupResolver(loginSchema),
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   // ** Handlers:
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
-  };
-
-  const onSubmitHandler = (e: FormEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    console.log(user);
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    // console.log(data);
   };
 
   return (
@@ -58,29 +58,27 @@ export default function SimpleCard() {
           bg={useColorModeValue("white", "gray.700")}
           boxShadow={"lg"}
           p={8}
-          onSubmit={(e) => onSubmitHandler(e)}
+          onSubmit={handleSubmit(onSubmit)}
         >
           <Stack spacing={4}>
-            <FormControl id="email">
+            <FormControl id="identifier" isInvalid={!!errors.identifier}>
               <FormLabel>Email address</FormLabel>
               <Input
                 type="email"
-                isInvalid
+                isInvalid={!!errors.identifier}
                 errorBorderColor="crimson"
-                name="email"
-                value={user.email}
-                onChange={(e) => onChangeHandler(e)}
+                {...register("identifier", LOGIN_FORM[0].validation)}
               />
+              <FormErrorMessage>{errors.identifier?.message}</FormErrorMessage>
             </FormControl>
-            <FormControl id="password">
+            <FormControl id="password" isInvalid={!!errors.password}>
               <FormLabel>Password</FormLabel>
               <InputGroup>
                 <Input
                   type={showPassword ? "text" : "password"}
-                  isInvalid
-                  name="password"
-                  value={user.password}
-                  onChange={(e) => onChangeHandler(e)}
+                  isInvalid={!!errors.password}
+                  errorBorderColor="crimson"
+                  {...register("password", LOGIN_FORM[1].validation)}
                 />
                 <InputRightElement h={"full"}>
                   <Button
@@ -98,6 +96,7 @@ export default function SimpleCard() {
                   </Button>
                 </InputRightElement>
               </InputGroup>
+              <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
             </FormControl>
             <Stack spacing={10}>
               <Stack
@@ -109,10 +108,17 @@ export default function SimpleCard() {
                 <Text color={"blue.400"}>Forgot password?</Text>
               </Stack>
               <Button
-                bg={"blue.400"}
+                bg={
+                  errors.identifier || errors.identifier
+                    ? "red.400"
+                    : "blue.400"
+                }
                 color={"white"}
                 _hover={{
-                  bg: "blue.500",
+                  bg:
+                    errors.identifier || errors.identifier
+                      ? "red.500"
+                      : "blue.500",
                 }}
                 type="submit"
               >
