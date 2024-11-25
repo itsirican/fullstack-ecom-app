@@ -17,8 +17,9 @@ import {
 import { BsMoon, BsSun } from "react-icons/bs";
 import { NavLink as RouterLink } from "react-router-dom";
 import CookieService from "../services/CookieService";
-import { RootState } from "../app/store";
-import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../app/store";
+import { useDispatch, useSelector } from "react-redux";
+import { setOnOpenDrawerAction } from "../app/features/cartDrawerSlice";
 interface IProps {
   children: React.ReactNode;
 }
@@ -47,11 +48,16 @@ export default function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
   const token = CookieService.get("jwt");
   const { cartItems } = useSelector((state: RootState) => state.cart);
+  const dispatch = useDispatch<AppDispatch>();
 
   // ** Handlers:
   const logoutHandler = () => {
     CookieService.remove("jwt");
     window.location.reload();
+  };
+
+  const onOpenDrawerHandler = () => {
+    dispatch(setOnOpenDrawerAction());
   };
 
   return (
@@ -67,7 +73,9 @@ export default function Navbar() {
               <Button onClick={toggleColorMode}>
                 {colorMode === "light" ? <BsMoon /> : <BsSun />}
               </Button>
-              <Button>Cart({cartItems.length})</Button>
+              <Button onClick={onOpenDrawerHandler}>
+                Cart({cartItems.length})
+              </Button>
               {token ? (
                 <Menu>
                   <MenuButton

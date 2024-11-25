@@ -24,7 +24,7 @@ const Product = () => {
 
   const { isLoading, data } = useCustomQuery({
     queryKey: ["products", `${id}`],
-    url: `/api/products/${id}?populate=thumbnail,category`,
+    url: `/api/products/${id}?populate=thumbnail,category&fields=title,description,price`,
   });
 
   if (isLoading)
@@ -40,6 +40,7 @@ const Product = () => {
   const GoBack = () => navigate(-1);
 
   const addToCartHandler = () => {
+    // console.log(data.data);
     dispatch(setcartItemsAction(data.data));
   };
   return (
@@ -70,6 +71,7 @@ const Product = () => {
           <Button
             as={Link}
             to={`/products/${id}`}
+            onClick={addToCartHandler}
             bg={colorMode === "light" ? "#e6f3fd" : "#9f7aea"}
             color={colorMode !== "light" ? "#e6f3fd" : "9f7aea"}
             size={"xl"}
@@ -85,7 +87,6 @@ const Product = () => {
             }}
             mt={6}
             textTransform={"uppercase"}
-            onClick={addToCartHandler}
           >
             Add To Cart
           </Button>
