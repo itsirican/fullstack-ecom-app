@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { BsMoon, BsSun } from "react-icons/bs";
 import { NavLink as RouterLink } from "react-router-dom";
+import CookieService from "../services/CookieService";
 
 interface IProps {
   children: React.ReactNode;
@@ -43,6 +44,14 @@ const NavLink = ({ children }: IProps) => {
 
 export default function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
+  const token = CookieService.get("jwt");
+
+  // ** Handlers:
+  const logoutHandler = () => {
+    CookieService.remove("jwt");
+    window.location.reload();
+  };
+
   return (
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
@@ -56,39 +65,44 @@ export default function Navbar() {
               <Button onClick={toggleColorMode}>
                 {colorMode === "light" ? <BsMoon /> : <BsSun />}
               </Button>
-              <RouterLink to={"/login"}>Login</RouterLink>
-              <Menu>
-                <MenuButton
-                  as={Button}
-                  rounded={"full"}
-                  variant={"link"}
-                  cursor={"pointer"}
-                  minW={0}
-                >
-                  <Avatar
-                    size={"sm"}
-                    src={"https://avatars.dicebear.com/api/male/username.svg"}
-                  />
-                </MenuButton>
-                <MenuList alignItems={"center"}>
-                  <br />
-                  <Center>
+              {token ? (
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    rounded={"full"}
+                    variant={"link"}
+                    cursor={"pointer"}
+                    minW={0}
+                  >
                     <Avatar
-                      size={"2xl"}
+                      size={"sm"}
                       src={"https://avatars.dicebear.com/api/male/username.svg"}
                     />
-                  </Center>
-                  <br />
-                  <Center>
-                    <p>Username</p>
-                  </Center>
-                  <br />
-                  <MenuDivider />
-                  <MenuItem>Your Servers</MenuItem>
-                  <MenuItem>Account Settings</MenuItem>
-                  <MenuItem>Logout</MenuItem>
-                </MenuList>
-              </Menu>
+                  </MenuButton>
+                  <MenuList alignItems={"center"}>
+                    <br />
+                    <Center>
+                      <Avatar
+                        size={"2xl"}
+                        src={
+                          "https://avatars.dicebear.com/api/male/username.svg"
+                        }
+                      />
+                    </Center>
+                    <br />
+                    <Center>
+                      <p>Username</p>
+                    </Center>
+                    <br />
+                    <MenuDivider />
+                    <MenuItem>Your Servers</MenuItem>
+                    <MenuItem>Account Settings</MenuItem>
+                    <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+                  </MenuList>
+                </Menu>
+              ) : (
+                <RouterLink to={"/login"}>Login</RouterLink>
+              )}
             </Stack>
           </Flex>
         </Flex>

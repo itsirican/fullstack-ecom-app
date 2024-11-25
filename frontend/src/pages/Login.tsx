@@ -24,8 +24,15 @@ import { ILoginCredentials } from "../interface";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../app/features/loginSlice";
 import { AppDispatch, RootState } from "../app/store";
+import { Navigate } from "react-router-dom";
 
-export default function SimpleCard() {
+interface IProps {
+  isAuthenticated: string;
+}
+
+export default function SimpleCard({ isAuthenticated }: IProps) {
+  if (isAuthenticated) return <Navigate to={"/"} replace />;
+
   const {
     register,
     handleSubmit,
