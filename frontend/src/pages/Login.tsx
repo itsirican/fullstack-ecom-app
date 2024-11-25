@@ -20,25 +20,30 @@ import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../validation";
 import { LOGIN_FORM } from "../data";
-
-interface IFormInput {
-  identifier: string;
-  password: string;
-}
+import { ILoginCredentials } from "../interface";
+import { useDispatch, useSelector } from "react-redux";
+import { userLogin } from "../app/features/loginSlice";
+import { AppDispatch, RootState } from "../app/store";
 
 export default function SimpleCard() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormInput>({
+  } = useForm<ILoginCredentials>({
     resolver: yupResolver(loginSchema),
   });
   const [showPassword, setShowPassword] = useState(false);
 
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, data, error } = useSelector(
+    (state: RootState) => state.login
+  );
+
   // ** Handlers:
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    // console.log(data);
+  const onSubmit: SubmitHandler<ILoginCredentials> = async (data) => {
+    console.log(data);
+    dispatch(userLogin(data));
   };
 
   return (
@@ -121,6 +126,7 @@ export default function SimpleCard() {
                       : "blue.500",
                 }}
                 type="submit"
+                isLoading={loading}
               >
                 Sign in
               </Button>
