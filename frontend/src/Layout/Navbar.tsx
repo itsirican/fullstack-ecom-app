@@ -17,7 +17,8 @@ import {
 import { BsMoon, BsSun } from "react-icons/bs";
 import { NavLink as RouterLink } from "react-router-dom";
 import CookieService from "../services/CookieService";
-
+import { RootState } from "../app/store";
+import { useSelector } from "react-redux";
 interface IProps {
   children: React.ReactNode;
 }
@@ -45,6 +46,7 @@ const NavLink = ({ children }: IProps) => {
 export default function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
   const token = CookieService.get("jwt");
+  const { cartItems } = useSelector((state: RootState) => state.cart);
 
   // ** Handlers:
   const logoutHandler = () => {
@@ -65,6 +67,7 @@ export default function Navbar() {
               <Button onClick={toggleColorMode}>
                 {colorMode === "light" ? <BsMoon /> : <BsSun />}
               </Button>
+              <Button>Cart({cartItems.length})</Button>
               {token ? (
                 <Menu>
                   <MenuButton

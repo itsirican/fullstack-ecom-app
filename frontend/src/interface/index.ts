@@ -12,6 +12,7 @@ export interface IProduct {
       };
     };
   };
+  qty: number;
 }
 
 export interface ILoginCredentials {

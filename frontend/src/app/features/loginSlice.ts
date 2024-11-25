@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   IDataResponse,
   ILoginCredentials,
@@ -45,25 +45,28 @@ const loginSlice = createSlice({
       .addCase(userLogin.pending, (state) => {
         state.loading = true;
       })
-      .addCase(userLogin.fulfilled, (state, action) => {
-        state.loading = false;
-        state.data = action.payload;
-        toast({
-          title: "Logged in successfully.",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
-        const date = new Date();
-        const IN_DAYS = 5;
-        const IN_HOURS = 1000 * 60 * 60 * 24;
+      .addCase(
+        userLogin.fulfilled,
+        (state, action: PayloadAction<IDataResponse>) => {
+          state.loading = false;
+          state.data = action.payload;
+          toast({
+            title: "Logged in successfully.",
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+          });
+          const date = new Date();
+          const IN_DAYS = 5;
+          const IN_HOURS = 1000 * 60 * 60 * 24;
 
-        const EXPIRES_IN_DAYS = IN_HOURS * IN_DAYS;
+          const EXPIRES_IN_DAYS = IN_HOURS * IN_DAYS;
 
-        date.setTime(date.getTime() + EXPIRES_IN_DAYS);
-        const options = { path: "/", expires: date, httpOnly: false };
-        CookieService.set("jwt", action.payload.jwt, options);
-      })
+          date.setTime(date.getTime() + EXPIRES_IN_DAYS);
+          const options = { path: "/", expires: date, httpOnly: false };
+          CookieService.set("jwt", action.payload.jwt, options);
+        }
+      )
       .addCase(userLogin.rejected, (state, action) => {
         state.loading = false;
         state.data = null;

@@ -12,11 +12,15 @@ import {
 import { BsArrowLeft } from "react-icons/bs";
 import ProductCardSkeleton from "./ProductCardSkeleton";
 import ProductInfos from "./ProductInfos";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../app/store";
+import { setcartItemsAction } from "../app/features/cartSlice";
 
 const Product = () => {
   const { id } = useParams();
   const { colorMode } = useColorMode();
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   const { isLoading, data } = useCustomQuery({
     queryKey: ["products", `${id}`],
@@ -35,6 +39,9 @@ const Product = () => {
   // ** Handlers:
   const GoBack = () => navigate(-1);
 
+  const addToCartHandler = () => {
+    dispatch(setcartItemsAction(data.data));
+  };
   return (
     <>
       <Flex
@@ -78,6 +85,7 @@ const Product = () => {
             }}
             mt={6}
             textTransform={"uppercase"}
+            onClick={addToCartHandler}
           >
             Add To Cart
           </Button>
