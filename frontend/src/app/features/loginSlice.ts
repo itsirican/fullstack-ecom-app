@@ -6,6 +6,7 @@ import {
 } from "../../interface";
 import axiosInstance from "../../config/axiox.config";
 import { createStandaloneToast } from "@chakra-ui/react";
+import CookieService from "../../services/CookieService";
 
 interface IUserState {
   loading: boolean;
@@ -53,6 +54,15 @@ const loginSlice = createSlice({
           duration: 2000,
           isClosable: true,
         });
+        const date = new Date();
+        const IN_DAYS = 5;
+        const IN_HOURS = 1000 * 60 * 60 * 24;
+
+        const EXPIRES_IN_DAYS = IN_HOURS * IN_DAYS;
+
+        date.setTime(date.getTime() + EXPIRES_IN_DAYS);
+        const options = { path: "/", expires: date };
+        CookieService.set("jwt", action.payload.jwt, options);
       })
       .addCase(userLogin.rejected, (state, action) => {
         state.loading = false;
