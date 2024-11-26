@@ -3,6 +3,7 @@ import { IProduct } from "../interface";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../app/store";
 import { removeFromCartAction } from "../app/features/cartSlice";
+import { BsTrash } from "react-icons/bs";
 
 interface IProps {
   product: IProduct;
@@ -38,7 +39,9 @@ const CartDrawerItem = ({ product: { id, attributes, qty } }: IProps) => {
         </Stack>
         <Stack>
           <Text fontSize={"sm"}>Quantity: {qty}</Text>
+
           <Button
+            leftIcon={<BsTrash />}
             variant={"outline"}
             colorScheme="red"
             size={"xs"}

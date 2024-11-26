@@ -38,6 +38,7 @@ const NavLink = ({ children }: IProps) => {
         textDecoration: "none",
         bg: useColorModeValue("gray.200", "gray.700"),
       }}
+      _activeLink={{ bg: useColorModeValue("gray.200", "gray.700") }}
     >
       {children}
     </Box>

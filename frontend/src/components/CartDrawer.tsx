@@ -54,7 +54,7 @@ const CartDrawer = () => {
                 ))}
               </>
             ) : (
-              <Text fontSize={"lg"}>Your Cart is Empty.</Text>
+              <Text fontSize={"lg"}>Your cart is empty.</Text>
             )}
           </DrawerBody>
 

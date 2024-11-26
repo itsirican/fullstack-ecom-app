@@ -7,7 +7,10 @@ import AppLayout from "./Layout/AppLayout";
 import Product from "./components/Product";
 import LoginPage from "./pages/Login";
 import CookieService from "./services/CookieService";
-import CartDrawer from "./components/cartDrawer";
+import CartDrawer from "./components/CartDrawer";
+import AdminDashboard from "./pages/dashboard";
+import DashboardLayout from "./Layout/DashboardLayout";
+import DashboardProductsPage from "./pages/dashboard/DashboardProducts";
 
 function App() {
   const token = CookieService.get("jwt");
@@ -21,7 +24,17 @@ function App() {
           <Route path="products" element={<Products />} />
           <Route path="products/:id" element={<Product />} />
         </Route>
+
         <Route path="/login" element={<LoginPage isAuthenticated={token} />} />
+
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route
+            path="/dashboard/products"
+            element={<DashboardProductsPage />}
+          />
+          <Route path="/dashboard/categories" element={<AdminDashboard />} />
+        </Route>
       </Routes>
     </>
   );
