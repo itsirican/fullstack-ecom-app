@@ -1,7 +1,8 @@
 import { Button, Divider, Flex, Image, Stack, Text } from "@chakra-ui/react";
 import { IProduct } from "../interface";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../app/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../app/store";
+import { removeFromCartAction } from "../app/features/cartSlice";
 
 interface IProps {
   product: IProduct;
@@ -10,12 +11,8 @@ interface IProps {
 const CartDrawerItem = ({ product: { id, attributes, qty } }: IProps) => {
   const { title, price, thumbnail } = attributes;
   const dispatch = useDispatch<AppDispatch>();
-  const { cartItems } = useSelector((state: RootState) => state.cart);
 
   // ** Handlers:
-  const onRemoveItem = () => {
-    const filtered = cartItems.filter((item) => item.id !== id);
-  };
 
   return (
     <>
@@ -42,10 +39,11 @@ const CartDrawerItem = ({ product: { id, attributes, qty } }: IProps) => {
         <Stack>
           <Text fontSize={"sm"}>Quantity: {qty}</Text>
           <Button
-            variant={"solid"}
+            variant={"outline"}
             colorScheme="red"
             size={"xs"}
             w={"fit-content"}
+            onClick={() => dispatch(removeFromCartAction(id))}
           >
             Remove
           </Button>

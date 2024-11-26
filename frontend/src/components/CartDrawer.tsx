@@ -44,12 +44,18 @@ const CartDrawer = () => {
           <DrawerCloseButton />
           <DrawerHeader>Your Shopping Cart</DrawerHeader>
           <DrawerBody>
-            <Text textAlign={"right"} fontWeight={"semibold"}>
-              Total: ${calcToal(cartItems)}
-            </Text>
-            {cartItems.map((item) => (
-              <CartDrawerItem key={item.id} product={item} />
-            ))}
+            {cartItems.length ? (
+              <>
+                <Text textAlign={"right"} fontWeight={"semibold"}>
+                  Total: ${calcToal(cartItems)}
+                </Text>
+                {cartItems.map((item) => (
+                  <CartDrawerItem key={item.id} product={item} />
+                ))}
+              </>
+            ) : (
+              <Text fontSize={"lg"}>Your Cart is Empty.</Text>
+            )}
           </DrawerBody>
 
           <DrawerFooter>
