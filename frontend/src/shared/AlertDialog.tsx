@@ -18,6 +18,8 @@ interface IProps {
   cancelTxt?: string;
   okTxt?: string;
   variant?: "ghost" | "link" | "outline" | "solid" | "unstyled";
+  isLoading: boolean;
+  onOkHandler: () => void;
 }
 
 function CustomAlertDialog({
@@ -28,6 +30,8 @@ function CustomAlertDialog({
   cancelTxt = "Cancel",
   okTxt = "Ok",
   variant = "solid",
+  isLoading,
+  onOkHandler,
 }: IProps) {
   const cancelRef = useRef<HTMLButtonElement | null>(null);
 
@@ -50,7 +54,13 @@ function CustomAlertDialog({
             <Button ref={cancelRef} onClick={onClose}>
               {cancelTxt}
             </Button>
-            <Button colorScheme="red" ml={3} variant={variant}>
+            <Button
+              colorScheme="red"
+              ml={3}
+              variant={variant}
+              isLoading={isLoading}
+              onClick={() => onOkHandler()}
+            >
               {okTxt}
             </Button>
           </AlertDialogFooter>
