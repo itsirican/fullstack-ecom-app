@@ -7,6 +7,7 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Button,
+  Text,
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,11 +15,14 @@ import { AppDispatch } from "../app/store";
 import { setOnCloseDrawerAction } from "../app/features/cartDrawerSlice";
 import { RootState } from "../app/store";
 import { setClearCartItemsAction } from "../app/features/cartSlice";
+import CartDrawerItem from "./CartDrawerItem";
 
 const CartDrawer = () => {
   const btnRef = useRef<HTMLElement>(null);
   const dispatch = useDispatch<AppDispatch>();
   const { isOpenDrawer } = useSelector((state: RootState) => state.cartDrawer);
+  const { cartItems } = useSelector((state: RootState) => state.cart);
+
   // ** Handlers:
   const onCloseHandler = () => dispatch(setOnCloseDrawerAction());
   const onClearAllHandler = () => {
@@ -38,8 +42,14 @@ const CartDrawer = () => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>Create your account</DrawerHeader>
-
-          <DrawerBody></DrawerBody>
+          <DrawerBody>
+            <Text textAlign={"right"} fontWeight={"semibold"}>
+              Total: $169.99
+            </Text>
+            {cartItems.map((item) => (
+              <CartDrawerItem key={item.id} product={item} />
+            ))}
+          </DrawerBody>
 
           <DrawerFooter>
             <Button

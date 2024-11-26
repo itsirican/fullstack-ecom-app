@@ -28,3 +28,4 @@ export const addItemsToShoppingCart = (
   });
   return [...cartItems, { ...product, qty: 1 }];
 };
+
