@@ -35,6 +35,7 @@ const TableSkeleton = () => {
           </Flex>
         </Flex>
       ))}
+      <Skeleton h={15} w={"50%"} maxW={"250px"} bg={"gray"} mx={"auto"} />
     </Stack>
   );
 };
