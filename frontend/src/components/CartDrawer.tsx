@@ -16,6 +16,7 @@ import { setOnCloseDrawerAction } from "../app/features/cartDrawerSlice";
 import { RootState } from "../app/store";
 import { setClearCartItemsAction } from "../app/features/cartSlice";
 import CartDrawerItem from "./CartDrawerItem";
+import { calcToal } from "../utils/functions";
 
 const CartDrawer = () => {
   const btnRef = useRef<HTMLElement>(null);
@@ -41,10 +42,10 @@ const CartDrawer = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Create your account</DrawerHeader>
+          <DrawerHeader>Your Shopping Cart</DrawerHeader>
           <DrawerBody>
             <Text textAlign={"right"} fontWeight={"semibold"}>
-              Total: $169.99
+              Total: ${calcToal(cartItems)}
             </Text>
             {cartItems.map((item) => (
               <CartDrawerItem key={item.id} product={item} />

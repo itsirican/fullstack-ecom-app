@@ -26,7 +26,14 @@ export const addItemsToShoppingCart = (
     duration: 2000,
     isClosable: true,
   });
-  
   return [...cartItems, { ...product, qty: 1 }];
 };
 
+export const calcToal = (cartItems: IProduct[]) => {
+  return cartItems
+    .reduce(
+      (total, item) => (total = total + item.attributes.price * item.qty),
+      0
+    )
+    .toFixed(2);
+};
