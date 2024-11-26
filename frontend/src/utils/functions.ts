@@ -26,6 +26,7 @@ export const addItemsToShoppingCart = (
     duration: 2000,
     isClosable: true,
   });
+  
   return [...cartItems, { ...product, qty: 1 }];
 };
 
