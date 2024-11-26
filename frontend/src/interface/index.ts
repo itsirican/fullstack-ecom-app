@@ -4,6 +4,14 @@ export interface IProduct {
     title: string;
     description: string;
     price: number;
+    stock: number;
+    category: {
+      data: {
+        attributes: {
+          title: string;
+        };
+      };
+    };
     thumbnail?: {
       data?: {
         attributes?: {
