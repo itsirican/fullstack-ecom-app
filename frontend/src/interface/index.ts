@@ -23,6 +23,20 @@ export interface IProduct {
   qty: number;
 }
 
+export interface IAdminProduct {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  stock: number;
+  category: {
+    title: string;
+  };
+  thumbnail?: {
+    url?: string;
+  };
+}
+
 export interface ILoginCredentials {
   identifier: string;
   password: string;

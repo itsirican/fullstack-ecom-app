@@ -33,7 +33,7 @@ function App() {
             path="/dashboard/products"
             element={<DashboardProductsPage />}
           />
-          <Route path="/dashboard/categories" element={<AdminDashboard />} />
+          <Route path="/dashboard/categories" element={<>Catgory Page</>} />
         </Route>
       </Routes>
     </>

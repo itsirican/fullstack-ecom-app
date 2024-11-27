@@ -1,5 +1,15 @@
 import {
+  Box,
   Button,
+  FormControl,
+  FormLabel,
+  Input,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  useDisclosure,
   Image,
   Table,
   TableCaption,
@@ -10,42 +20,67 @@ import {
   Th,
   Thead,
   Tr,
-  useDisclosure,
 } from "@chakra-ui/react";
 import TableSkeleton from "./TableSkeleton";
 import {
   useGetDashboardProductsQuery,
   useRemoveDashboardProductMutation,
 } from "../app/services/products";
-import { IProduct } from "../interface";
+
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import CustomModel from "../shared/Modal";
+import { IAdminProduct } from "../interface";
+import { defaultProductObj } from "../data";
+import ProductTable from "./ProductTable";
+import { useForm } from "react-hook-form";
+import FormModal from "./FormModal";
+import { Link } from "react-router-dom";
 import imgFalBack from "../assets/img-placeholder.png";
 import { AiOutlineEye } from "react-icons/ai";
-import { Link } from "react-router-dom";
 import { BsTrash } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
-import CustomAlertDialog from "../shared/AlertDialog";
-import { useEffect, useState } from "react";
 
 const DashboardProductsTable = () => {
-  const [selectedProductId, setSelectedProductId] = useState<number | null>(
-    null
-  );
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const [selectedProductId, setSelectedProductId] = useState<number | null>(
+  //   null
+  // );
+  // const initialRef = useRef<null | HTMLInputElement>(null);
+  const [productToEdit, setProductToEdit] = useState<IAdminProduct>({
+    ...defaultProductObj,
+  });
+  // const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenModal,
+    onOpen: onOpenModal,
+    onClose: onCloseModal,
+  } = useDisclosure();
   const { isLoading, data } = useGetDashboardProductsQuery({ page: 1 });
-  const [destroyProduct, { isLoading: isDestroying, isSuccess }] =
-    useRemoveDashboardProductMutation();
+  // const [destroyProduct, { isLoading: isDestroying, isSuccess }] =
+  //   useRemoveDashboardProductMutation();
 
-  useEffect(() => {
-    if (isSuccess) {
-      setSelectedProductId(null);
-      onClose();
-    }
-  }, [isSuccess]);
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     setSelectedProductId(null);
+  //     onClose();
+  //   }
+  // }, [isSuccess]);
 
-  // console.log(data);
+  // console.log(productToEdit);
+
+  const { register, handleSubmit } = useForm();
+
+  // ** Handlers:
+  const onSubmit = handleSubmit((data) => {
+    console.log(data);
+  });
+  // console.log(productToEdit?.title);
   if (isLoading) return <TableSkeleton />;
+  // console.log(data);
+  // console.log("product to edit:", productToEdit);
   return (
     <>
+      <h1>Hello</h1>
+      {/* <ProductTable products={data.products} /> */}
       <TableContainer
         maxW={"100%"}
         mx={"auto"}
@@ -62,7 +97,9 @@ const DashboardProductsTable = () => {
         }}
       >
         <Table variant="simple">
-          <TableCaption>Products Total: {data.data.length ?? 0}</TableCaption>
+          <TableCaption>
+            Products Total: {data.products.length ?? 0}
+          </TableCaption>
           <Thead>
             <Tr>
               <Th isNumeric>ID</Th>
@@ -75,15 +112,15 @@ const DashboardProductsTable = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {data.data.map((item: IProduct) => (
-              <Tr key={item.id}>
-                <Td isNumeric>{item.id}</Td>
-                <Td>{item.attributes.title}</Td>
-                <Td>{item.attributes.category.data.attributes.title}</Td>
+            {data.products.map((product: IAdminProduct) => (
+              <Tr key={product.id}>
+                <Td isNumeric>{product.id}</Td>
+                <Td>{product.title}</Td>
+                <Td>{product.category.title}</Td>
                 <Td>
                   <Image
-                    src={`${import.meta.env.VITE_SERVER_URL}${item.attributes.thumbnail?.data?.attributes?.url}`}
-                    alt={item.attributes.title}
+                    src={`${import.meta.env.VITE_SERVER_URL}${product.thumbnail?.url}`}
+                    alt={product.title}
                     w={"80px"}
                     h={"80px"}
                     rounded={"full"}
@@ -91,12 +128,12 @@ const DashboardProductsTable = () => {
                     fallbackSrc={imgFalBack}
                   />
                 </Td>
-                <Td isNumeric>{item.attributes.price}</Td>
-                <Td isNumeric>{item.attributes.stock}</Td>
+                <Td isNumeric>{product.price}</Td>
+                <Td isNumeric>{product.stock}</Td>
                 <Td>
                   <Button
                     as={Link}
-                    to={`/products/${item.id}`}
+                    to={`/products/${product.id}`}
                     colorScheme="purple"
                     variant={"solid"}
                     mr={3}
@@ -109,10 +146,10 @@ const DashboardProductsTable = () => {
                     colorScheme="red"
                     variant={"solid"}
                     mr={3}
-                    onClick={() => {
-                      onOpen();
-                      setSelectedProductId(item.id);
-                    }}
+                    // onClick={() => {
+                    //   onOpen();
+                    //   setSelectedProductId(product.id);
+                    // }}
                   >
                     <BsTrash size={17} />
                   </Button>
@@ -120,7 +157,10 @@ const DashboardProductsTable = () => {
                     colorScheme="blue"
                     variant={"solid"}
                     mr={3}
-                    onClick={() => {}}
+                    onClick={() => {
+                      setProductToEdit(product);
+                      onOpenModal();
+                    }}
                   >
                     <FiEdit size={17} />
                   </Button>
@@ -141,7 +181,8 @@ const DashboardProductsTable = () => {
           </Tfoot>
         </Table>
       </TableContainer>
-      <CustomAlertDialog
+
+      {/* <CustomAlertDialog
         isOpen={isOpen}
         onClose={onClose}
         title={"Are you sure?"}
@@ -150,6 +191,12 @@ const DashboardProductsTable = () => {
         variant="outline"
         isLoading={isDestroying}
         onOkHandler={() => destroyProduct(selectedProductId)}
+      /> */}
+
+      <FormModal
+        clickedProduct={productToEdit}
+        isOpen={isOpenModal}
+        onCloseModal={onCloseModal}
       />
     </>
   );

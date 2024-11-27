@@ -19,3 +19,17 @@ export const LOGIN_FORM: ILoginInput[] = [
     },
   },
 ];
+
+export const defaultProductObj = {
+  id: 0,
+  title: "",
+  description: "",
+  price: 0,
+  stock: 0,
+  category: {
+    title: "",
+  },
+  thumbnail: {
+    url: "",
+  },
+};

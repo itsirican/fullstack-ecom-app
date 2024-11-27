@@ -16,13 +16,16 @@ export const productsApiSlice = createApi({
       query: (arg) => {
         const { page } = arg;
         return {
-          url: `/api/products?populate=category,thumbnail&pagination[page]=${page}&pagination[pageSize]=7`,
+          url: `/api/users/me?populate[products][populate]=category,thumbnail&pagination[page]=${page}&pagination[pageSize]=7`,
+          headers: {
+            Authorization: `Bearer ${CookieService.get("jwt")}`,
+          },
         };
       },
       providesTags: (result) =>
         result
           ? [
-              ...result.data.map(({ id }: IRequest) => ({
+              ...result.products.map(({ id }: IRequest) => ({
                 type: "Products" as const,
                 id,
               })),
