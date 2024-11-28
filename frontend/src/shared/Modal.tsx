@@ -18,6 +18,7 @@ interface IProps {
   okTxt?: string;
   cancelTxt?: string;
   children: ReactNode;
+  isLoading: boolean;
 }
 
 const CustomModel = ({
@@ -28,6 +29,7 @@ const CustomModel = ({
   cancelTxt = "Close",
   children,
   onOkHandler,
+  isLoading,
 }: IProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -41,7 +43,11 @@ const CustomModel = ({
           <Button mr={3} onClick={onClose}>
             {cancelTxt}
           </Button>
-          <Button colorScheme="blue" onClick={onOkHandler}>
+          <Button
+            colorScheme="blue"
+            isLoading={isLoading}
+            onClick={onOkHandler}
+          >
             {okTxt}
           </Button>
         </ModalFooter>

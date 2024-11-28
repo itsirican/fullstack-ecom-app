@@ -9,12 +9,13 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Textarea,
 } from "@chakra-ui/react";
 import CustomModel from "../shared/Modal";
 import { IAdminProduct } from "../interface";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { defaultProductObj } from "../data";
+import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useUpdateDashboardProductsMutation } from "../app/services/products";
 
 interface IProps {
   isOpen: boolean;
@@ -23,34 +24,44 @@ interface IProps {
 }
 
 const FormModal = ({ isOpen, onCloseModal, clickedProduct }: IProps) => {
-  const [productToUpdate, setProductToUpdate] =
-    useState<IAdminProduct>(defaultProductObj);
-  // const [isValid, setIsValid] = useState(false);
-
+  const [updateProduct, { isLoading, isSuccess }] =
+    useUpdateDashboardProductsMutation();
   const { register, handleSubmit, reset } = useForm<IAdminProduct>();
   useEffect(() => {
     if (isOpen) reset(clickedProduct);
+    else if (isSuccess) {
+      reset(clickedProduct);
+      onCloseModal();
+    }
   }, [isOpen]);
-  // console.log(clickedProduct);
 
-  // console.log(productToEdit);
-  // ** Handlers:
-  // const onSubmit = handleSubmit((data) => {
-  //   console.log(data);
-  // });
-  // useEffect(() => {
-  //   setProductToEdit(clickedProduct);
-  // }, [clickedProduct]);
+  useEffect(() => {
+    if (isSuccess) {
+      reset(clickedProduct);
+      onCloseModal();
+    }
+  }, [isSuccess]);
 
-  // console.log("received product:", productToEdit);
-  // const handleOnChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = e.target;
-  //   setProductToEdit((prev) => ({ ...prev, [name]: value }));
-  //   console.log(productToEdit);
-  // }, []);
+  const onSubmit: SubmitHandler<IAdminProduct> = async (
+    data: IAdminProduct
+  ) => {
+    console.log(data);
+    const formData = new FormData();
+    formData.append(
+      "data",
+      JSON.stringify({
+        title: data.title,
+        description: data.description,
+        price: data.price,
+        stock: data.stock,
+      })
+    );
+    if (data?.thumbnail) {
+      formData.append("files.thumbnail", data.thumbnail[0]);
+    }
+    updateProduct({ id: data.id, body: formData });
 
-  const onSubmit: SubmitHandler<IAdminProduct> = async (data) => {
-    setProductToUpdate(data);
+    // console.log(formData);
   };
 
   return (
@@ -60,6 +71,7 @@ const FormModal = ({ isOpen, onCloseModal, clickedProduct }: IProps) => {
       title="Update Product"
       okTxt="Update"
       onOkHandler={handleSubmit(onSubmit)}
+      isLoading={isLoading}
     >
       <Box as={"form"} onSubmit={handleSubmit(onSubmit)}>
         <FormControl>
@@ -71,7 +83,8 @@ const FormModal = ({ isOpen, onCloseModal, clickedProduct }: IProps) => {
         </FormControl>
         <FormControl my={3}>
           <FormLabel>Description</FormLabel>
-          <Input
+          <Textarea
+            rows={5}
             placeholder="Product Description"
             {...register("description", { required: true })}
           />

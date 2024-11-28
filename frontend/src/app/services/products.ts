@@ -12,6 +12,7 @@ export const productsApiSlice = createApi({
   refetchOnMountOrArgChange: true,
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_SERVER_URL }),
   endpoints: (builder) => ({
+    // ** GET
     getDashboardProducts: builder.query({
       query: (arg) => {
         const { page } = arg;
@@ -26,13 +27,44 @@ export const productsApiSlice = createApi({
         result
           ? [
               ...result.products.map(({ id }: IRequest) => ({
-                type: "Products" as const,
+                type: "Products",
                 id,
               })),
-              "Products",
+              { type: "Products", id: "LIST" },
             ]
-          : ["Products"],
+          : [{ type: "Products", id: "LIST" }],
     }),
+
+    // ** PUT
+    updateDashboardProducts: builder.mutation({
+      query: ({ id, body }) => ({
+        url: `/api/products/${id}`,
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${CookieService.get("jwt")}`,
+        },
+        body: body,
+      }),
+      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          productsApiSlice.util.updateQueryData(
+            "getDashboardProducts",
+            id,
+            (draft) => {
+              Object.assign(draft, patch);
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+      invalidatesTags: [{ type: "Products", id: "LIST" }],
+    }),
+
+    // ** DELETE
     removeDashboardProduct: builder.mutation({
       query: (id) => {
         return {
@@ -43,7 +75,7 @@ export const productsApiSlice = createApi({
           },
         };
       },
-      invalidatesTags: ["Products"],
+      invalidatesTags: [{ type: "Products", id: "LIST" }],
     }),
   }),
 });
@@ -52,4 +84,5 @@ export default productsApiSlice;
 export const {
   useGetDashboardProductsQuery,
   useRemoveDashboardProductMutation,
+  useUpdateDashboardProductsMutation,
 } = productsApiSlice;
