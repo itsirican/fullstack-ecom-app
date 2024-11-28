@@ -1,14 +1,5 @@
 import {
-  Box,
   Button,
-  FormControl,
-  FormLabel,
-  Input,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
   useDisclosure,
   Image,
   Table,
@@ -27,60 +18,56 @@ import {
   useRemoveDashboardProductMutation,
 } from "../app/services/products";
 
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import CustomModel from "../shared/Modal";
+import { useEffect, useState } from "react";
 import { IAdminProduct } from "../interface";
 import { defaultProductObj } from "../data";
-import ProductTable from "./ProductTable";
-import { useForm } from "react-hook-form";
 import FormModal from "./FormModal";
 import { Link } from "react-router-dom";
 import imgFalBack from "../assets/img-placeholder.png";
 import { AiOutlineEye } from "react-icons/ai";
 import { BsTrash } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
+import CustomAlertDialog from "../shared/AlertDialog";
 
 const DashboardProductsTable = () => {
-  // const [selectedProductId, setSelectedProductId] = useState<number | null>(
-  //   null
-  // );
-  // const initialRef = useRef<null | HTMLInputElement>(null);
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(
+    null
+  );
   const [productToEdit, setProductToEdit] = useState<IAdminProduct>({
     ...defaultProductObj,
   });
-  // const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpenModal,
     onOpen: onOpenModal,
     onClose: onCloseModal,
   } = useDisclosure();
   const { isLoading, data } = useGetDashboardProductsQuery({ page: 1 });
-  // const [destroyProduct, { isLoading: isDestroying, isSuccess }] =
-  //   useRemoveDashboardProductMutation();
+  const [destroyProduct, { isLoading: isDestroying, isSuccess }] =
+    useRemoveDashboardProductMutation();
 
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     setSelectedProductId(null);
-  //     onClose();
-  //   }
-  // }, [isSuccess]);
+  useEffect(() => {
+    if (isSuccess) {
+      setSelectedProductId(null);
+      onClose();
+    }
+  }, [isSuccess]);
 
-  // console.log(productToEdit);
-
-  const { register, handleSubmit } = useForm();
-
-  // ** Handlers:
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
-  });
-  // console.log(productToEdit?.title);
   if (isLoading) return <TableSkeleton />;
-  // console.log(data);
-  // console.log("product to edit:", productToEdit);
+
   return (
     <>
-      <h1>Hello</h1>
-      {/* <ProductTable products={data.products} /> */}
+      <Button
+        display={"flex"}
+        ml={"auto"}
+        mb={"10px"}
+        onClick={() => {
+          console.log("clicked");
+          onOpenModal();
+        }}
+      >
+        Create
+      </Button>
       <TableContainer
         maxW={"100%"}
         mx={"auto"}
@@ -116,7 +103,7 @@ const DashboardProductsTable = () => {
               <Tr key={product.id}>
                 <Td isNumeric>{product.id}</Td>
                 <Td>{product.title}</Td>
-                <Td>{product.category.title}</Td>
+                <Td>{product.category?.title}</Td>
                 <Td>
                   <Image
                     src={`${import.meta.env.VITE_SERVER_URL}${product.thumbnail?.url}`}
@@ -124,7 +111,7 @@ const DashboardProductsTable = () => {
                     w={"80px"}
                     h={"80px"}
                     rounded={"full"}
-                    // objectFit={"cover"}
+                    objectFit={"cover"}
                     fallbackSrc={imgFalBack}
                   />
                 </Td>
@@ -146,10 +133,10 @@ const DashboardProductsTable = () => {
                     colorScheme="red"
                     variant={"solid"}
                     mr={3}
-                    // onClick={() => {
-                    //   onOpen();
-                    //   setSelectedProductId(product.id);
-                    // }}
+                    onClick={() => {
+                      onOpen();
+                      setSelectedProductId(product.id);
+                    }}
                   >
                     <BsTrash size={17} />
                   </Button>
@@ -182,7 +169,7 @@ const DashboardProductsTable = () => {
         </Table>
       </TableContainer>
 
-      {/* <CustomAlertDialog
+      <CustomAlertDialog
         isOpen={isOpen}
         onClose={onClose}
         title={"Are you sure?"}
@@ -191,7 +178,7 @@ const DashboardProductsTable = () => {
         variant="outline"
         isLoading={isDestroying}
         onOkHandler={() => destroyProduct(selectedProductId)}
-      /> */}
+      />
 
       <FormModal
         clickedProduct={productToEdit}

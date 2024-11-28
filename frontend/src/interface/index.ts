@@ -24,16 +24,12 @@ export interface IProduct {
 }
 
 interface IFile {
-  lastModified: number; // Timestamp of the last modification
-  lastModifiedDate: Date; // Date object representing last modified time
-  name: string; // Name of the file
-  size: number; // File size in bytes
-  type: string; // MIME type of the file (e.g., "image/jpeg")
-  webkitRelativePath: string; // Relative path if using input with webkitdirectory (empty string otherwise)
-}
-
-interface Ithumb {
-  thumbnail: IFile[];
+  lastModified: number;
+  lastModifiedDate: Date;
+  name: string;
+  size: number;
+  type: string;
+  webkitRelativePath: string;
 }
 
 export interface IAdminProduct {

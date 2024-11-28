@@ -43,9 +43,7 @@ export default function SimpleCard({ isAuthenticated }: IProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, data, error } = useSelector(
-    (state: RootState) => state.login
-  );
+  const { loading } = useSelector((state: RootState) => state.login);
 
   // ** Handlers:
   const onSubmit: SubmitHandler<ILoginCredentials> = async (data) => {

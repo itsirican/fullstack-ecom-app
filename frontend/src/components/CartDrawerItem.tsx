@@ -29,9 +29,8 @@ const CartDrawerItem = ({ product: { id, attributes, qty } }: IProps) => {
           w={"80px"}
           h={"80px"}
           rounded={"full"}
-          // objectFit={"cover"}
+          objectFit={"cover"}
           mr={2}
-          // fallbackSrc={imgFalBack}
         />
         <Stack>
           <Text fontSize={"sm"}>Title: {title}</Text>
