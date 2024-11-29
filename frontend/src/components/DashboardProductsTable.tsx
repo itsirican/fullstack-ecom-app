@@ -29,8 +29,11 @@ import { BsTrash } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import CustomAlertDialog from "../shared/AlertDialog";
 import CreateProductModal from "./CreateProductModal";
+import { useSelector } from "react-redux";
+import { RootState } from "../app/store";
 
 const DashboardProductsTable = () => {
+  const { isOnline } = useSelector((state: RootState) => state.network);
   const [selectedProductId, setSelectedProductId] = useState<number | null>(
     null
   );
@@ -59,14 +62,14 @@ const DashboardProductsTable = () => {
     }
   }, [isSuccess]);
 
-  if (isLoading) return <TableSkeleton />;
+  if (isLoading || !isOnline) return <TableSkeleton />;
   return (
     <>
       <Button
         display={"flex"}
         ml={"auto"}
         mb={"10px"}
-        colorScheme="blue"
+        colorScheme="green"
         onClick={() => {
           // console.log("clicked");
           onOpenCreateModal();

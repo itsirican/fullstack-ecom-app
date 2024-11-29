@@ -25,8 +25,11 @@ import { FiEdit } from "react-icons/fi";
 import CustomAlertDialog from "../shared/AlertDialog";
 import UpdateCategoryModal from "./UpdateCategoryModal";
 import CreateCategoryModal from "./CreateCategoryModal";
+import { useSelector } from "react-redux";
+import { RootState } from "../app/store";
 
 const DashboardCategoriesTable = () => {
+  const { isOnline } = useSelector((state: RootState) => state.network);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null
   );
@@ -55,14 +58,14 @@ const DashboardCategoriesTable = () => {
     }
   }, [isSuccess]);
 
-  if (isLoading) return <TableSkeleton />;
+  if (isLoading || !isOnline) return <TableSkeleton />;
   return (
     <>
       <Button
         display={"flex"}
         ml={"auto"}
         mb={"10px"}
-        colorScheme="blue"
+        colorScheme="green"
         onClick={() => {
           onOpenCreateModal();
         }}

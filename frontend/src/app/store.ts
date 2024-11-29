@@ -8,6 +8,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import productsApiSlice from "./services/products";
 import categoriesApiSlice from "./services/categories";
+import networkSlice from "./features/networkSlice";
 
 const persistCartConfig = {
   key: "cart",
@@ -17,6 +18,7 @@ const persistedCart = persistReducer(persistCartConfig, cartSlice);
 
 export const store = configureStore({
   reducer: {
+    network: networkSlice,
     cart: persistedCart,
     login: loginSlice,
     cartDrawer: cartDrawerSlice,
