@@ -4,16 +4,12 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
-  Select,
 } from "@chakra-ui/react";
 import CustomModel from "../shared/Modal";
 import { ICategory } from "../interface";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import {
-  useCreateDashboardCategoriesMutation,
-  useUpdateDashboardCategoriesMutation,
-} from "../app/services/products";
+import { useCreateDashboardCategoriesMutation } from "../app/services/categories";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { categoryFormSchema } from "../validation";
 import { defaultCategoryObj } from "../data";
@@ -59,7 +55,6 @@ const CreateCategoryModal = ({ isOpen, onCloseModal }: IProps) => {
     );
     createCategory({ id: data.id, body: formData });
   };
-  // if (isLoadingCategories) return;
   return (
     <CustomModel
       isOpen={isOpen}

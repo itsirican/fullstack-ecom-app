@@ -16,10 +16,8 @@ import CustomModel from "../shared/Modal";
 import { IAdminProduct, ICategory } from "../interface";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import {
-  useGetDashboardCategoriesQuery,
-  useUpdateDashboardProductsMutation,
-} from "../app/services/products";
+import { useGetDashboardCategoriesQuery } from "../app/services/categories";
+import { useUpdateDashboardProductsMutation } from "../app/services/products";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { productFormSchema } from "../validation";
 

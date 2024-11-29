@@ -7,6 +7,7 @@ import cartDrawerSlice from "./features/cartDrawerSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import productsApiSlice from "./services/products";
+import categoriesApiSlice from "./services/categories";
 
 const persistCartConfig = {
   key: "cart",
@@ -20,13 +21,14 @@ export const store = configureStore({
     login: loginSlice,
     cartDrawer: cartDrawerSlice,
     [productsApiSlice.reducerPath]: productsApiSlice.reducer,
+    [categoriesApiSlice.reducerPath]: categoriesApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
       },
-    }).concat(productsApiSlice.middleware),
+    }).concat([productsApiSlice.middleware, categoriesApiSlice.middleware]),
 });
 
 export const persistor = persistStore(store);

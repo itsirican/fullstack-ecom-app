@@ -9,7 +9,7 @@ import CustomModel from "../shared/Modal";
 import { ICategory } from "../interface";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useUpdateDashboardCategoriesMutation } from "../app/services/products";
+import { useUpdateDashboardCategoriesMutation } from "../app/services/categories";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { categoryFormSchema } from "../validation";
 

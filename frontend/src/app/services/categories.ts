@@ -5,19 +5,18 @@ interface IRequest {
   id: number;
 }
 
-export const productsApiSlice = createApi({
-  reducerPath: "api",
-  tagTypes: ["Products"],
+export const categoriesApiSlice = createApi({
+  reducerPath: "categoryApi",
+  tagTypes: ["Categories"],
   refetchOnReconnect: true,
   refetchOnMountOrArgChange: true,
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_SERVER_URL }),
   endpoints: (builder) => ({
     // ** GET
-    getDashboardProducts: builder.query({
-      query: (arg) => {
-        const { page } = arg;
+    getDashboardCategories: builder.query({
+      query: () => {
         return {
-          url: `/api/users/me?populate[products][populate]=category,thumbnail&pagination[page]=${page}&pagination[pageSize]=7`,
+          url: `/api/users/me?populate=categories`,
           headers: {
             Authorization: `Bearer ${CookieService.get("jwt")}`,
           },
@@ -26,19 +25,19 @@ export const productsApiSlice = createApi({
       providesTags: (result) =>
         result
           ? [
-              ...result.products.map(({ id }: IRequest) => ({
-                type: "Products",
+              ...result.categories.map(({ id }: IRequest) => ({
+                type: "Categories",
                 id,
               })),
-              { type: "Products", id: "LIST" },
+              { type: "Categories", id: "LIST" },
             ]
-          : [{ type: "Products", id: "LIST" }],
+          : [{ type: "Categories", id: "LIST" }],
     }),
 
     // ** CREATE
-    createDashboardProducts: builder.mutation({
+    createDashboardCategories: builder.mutation({
       query: ({ body }) => ({
-        url: `/api/products`,
+        url: `/api/categories`,
         method: "POST",
         headers: {
           Authorization: `Bearer ${CookieService.get("jwt")}`,
@@ -47,8 +46,8 @@ export const productsApiSlice = createApi({
       }),
       async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          productsApiSlice.util.updateQueryData(
-            "getDashboardProducts",
+          categoriesApiSlice.util.updateQueryData(
+            "getDashboardCategories",
             id,
             (draft) => {
               Object.assign(draft, patch);
@@ -61,23 +60,23 @@ export const productsApiSlice = createApi({
           patchResult.undo();
         }
       },
-      invalidatesTags: [{ type: "Products", id: "LIST" }],
+      invalidatesTags: [{ type: "Categories", id: "LIST" }],
     }),
 
     // ** PUT
-    updateDashboardProducts: builder.mutation({
+    updateDashboardCategories: builder.mutation({
       query: ({ id, body }) => ({
-        url: `/api/products/${id}`,
+        url: `/api/categories/${id}`,
         method: "PUT",
         headers: {
           Authorization: `Bearer ${CookieService.get("jwt")}`,
         },
-        body: body,
+        body: { body },
       }),
       async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          productsApiSlice.util.updateQueryData(
-            "getDashboardProducts",
+          categoriesApiSlice.util.updateQueryData(
+            "getDashboardCategories",
             id,
             (draft) => {
               Object.assign(draft, patch);
@@ -90,29 +89,29 @@ export const productsApiSlice = createApi({
           patchResult.undo();
         }
       },
-      invalidatesTags: [{ type: "Products", id: "LIST" }],
+      invalidatesTags: [{ type: "Categories", id: "LIST" }],
     }),
 
     // ** DELETE
-    removeDashboardProduct: builder.mutation({
+    removeDashboardCategory: builder.mutation({
       query: (id) => {
         return {
-          url: `/api/products/${id}`,
+          url: `/api/categories/${id}`,
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${CookieService.get("jwt")}`,
           },
         };
       },
-      invalidatesTags: [{ type: "Products", id: "LIST" }],
+      invalidatesTags: [{ type: "Categories", id: "LIST" }],
     }),
   }),
 });
 
-export default productsApiSlice;
+export default categoriesApiSlice;
 export const {
-  useGetDashboardProductsQuery,
-  useRemoveDashboardProductMutation,
-  useUpdateDashboardProductsMutation,
-  useCreateDashboardProductsMutation,
-} = productsApiSlice;
+  useGetDashboardCategoriesQuery,
+  useUpdateDashboardCategoriesMutation,
+  useCreateDashboardCategoriesMutation,
+  useRemoveDashboardCategoryMutation,
+} = categoriesApiSlice;
