@@ -23,14 +23,14 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { productFormSchema } from "../validation";
 import { defaultProductObj } from "../data";
+import CookieService from "../services/CookieService";
 
 interface IProps {
   isOpen: boolean;
   onCloseModal: () => void;
-  userId: number;
 }
 
-const CreateProductModal = ({ isOpen, onCloseModal, userId }: IProps) => {
+const CreateProductModal = ({ isOpen, onCloseModal }: IProps) => {
   const [createProduct, { isLoading, isSuccess }] =
     useCreateDashboardProductsMutation();
   const { isLoading: isLoadingCategories, data } =
@@ -68,7 +68,7 @@ const CreateProductModal = ({ isOpen, onCloseModal, userId }: IProps) => {
         description: data.description,
         price: data.price,
         stock: data.stock,
-        user: userId,
+        user: CookieService.get("id"),
         category: {
           id: data.category.id,
         },

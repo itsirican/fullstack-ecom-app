@@ -20,7 +20,13 @@ export const productFormSchema = yup
     category: yup
       .object({
         id: yup.number().positive("Category is required.").required(),
+        title: yup.string().required(),
       })
       .required(),
   })
   .required();
+
+export const categoryFormSchema = yup.object({
+  id: yup.number().required(),
+  title: yup.string().trim().required("Title is required."),
+});

@@ -65,6 +65,7 @@ const loginSlice = createSlice({
           date.setTime(date.getTime() + EXPIRES_IN_DAYS);
           const options = { path: "/", expires: date, httpOnly: false };
           CookieService.set("jwt", action.payload.jwt, options);
+          CookieService.set("id", action.payload.user.id, options);
         }
       )
       .addCase(userLogin.rejected, (state, action) => {

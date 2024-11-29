@@ -14,12 +14,13 @@ import {
 } from "@chakra-ui/react";
 import TableSkeleton from "./TableSkeleton";
 import {
+  useGetDashboardCategoriesQuery,
   useGetDashboardProductsQuery,
   useRemoveDashboardProductMutation,
 } from "../app/services/products";
 
 import { useEffect, useState } from "react";
-import { IAdminProduct } from "../interface";
+import { IAdminProduct, ICategory } from "../interface";
 import { defaultProductObj } from "../data";
 import FormModal from "./FormModal";
 import { Link } from "react-router-dom";
@@ -29,12 +30,14 @@ import { BsTrash } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import CustomAlertDialog from "../shared/AlertDialog";
 import CreateProductModal from "./CreateProductModal";
+import UpdateCategoryModal from "./UpdateCategoryModal";
+import CreateCategoryModal from "./CreateCategoryModal";
 
-const DashboardProductsTable = () => {
-  const [selectedProductId, setSelectedProductId] = useState<number | null>(
+const DashboardCategoriesTable = () => {
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null
   );
-  const [productToEdit, setProductToEdit] = useState<IAdminProduct>({
+  const [categoryToEdit, setCategotyToEdit] = useState<ICategory>({
     ...defaultProductObj,
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -48,13 +51,13 @@ const DashboardProductsTable = () => {
     onOpen: onOpenCreateModal,
     onClose: onCloseCreateModal,
   } = useDisclosure();
-  const { isLoading, data } = useGetDashboardProductsQuery({ page: 1 });
+  const { isLoading, data } = useGetDashboardCategoriesQuery({});
   const [destroyProduct, { isLoading: isDestroying, isSuccess }] =
     useRemoveDashboardProductMutation();
 
   useEffect(() => {
     if (isSuccess) {
-      setSelectedProductId(null);
+      setSelectedCategoryId(null);
       onClose();
     }
   }, [isSuccess]);
@@ -91,21 +94,46 @@ const DashboardProductsTable = () => {
       >
         <Table variant="simple">
           <TableCaption>
-            Products Total: {data.products.length ?? 0}
+            Categories Total: {data.categories.length ?? 0}
           </TableCaption>
           <Thead>
             <Tr>
               <Th isNumeric>ID</Th>
               <Th>TITLE</Th>
-              <Th>CATEGORY</Th>
-              <Th>THUMBNAIL</Th>
-              <Th isNumeric>PRICE</Th>
-              <Th isNumeric>STOCK</Th>
-              <Th>ACTION</Th>
+              <Th isNumeric>ACTION</Th>
             </Tr>
           </Thead>
           <Tbody>
-            {data.products.map((product: IAdminProduct) => (
+            {data.categories.map((category: ICategory) => (
+              <Tr key={category.id}>
+                <Td isNumeric>{category.id}</Td>
+                <Td>{category.title}</Td>
+                <Td isNumeric>
+                  <Button
+                    colorScheme="red"
+                    variant={"solid"}
+                    mr={3}
+                    onClick={() => {
+                      onOpen();
+                      setSelectedCategoryId(category.id);
+                    }}
+                  >
+                    <BsTrash size={17} />
+                  </Button>
+                  <Button
+                    colorScheme="blue"
+                    variant={"solid"}
+                    onClick={() => {
+                      setCategotyToEdit(category);
+                      onOpenModal();
+                    }}
+                  >
+                    <FiEdit size={17} />
+                  </Button>
+                </Td>
+              </Tr>
+            ))}
+            {/* {data.products.map((product: IAdminProduct) => (
               <Tr key={product.id}>
                 <Td isNumeric>{product.id}</Td>
                 <Td>{product.title}</Td>
@@ -124,17 +152,6 @@ const DashboardProductsTable = () => {
                 <Td isNumeric>{product.price}</Td>
                 <Td isNumeric>{product.stock}</Td>
                 <Td>
-                  <Button
-                    as={Link}
-                    to={`/products/${product.id}`}
-                    colorScheme="purple"
-                    variant={"solid"}
-                    mr={3}
-                    target="_blank"
-                    onClick={() => {}}
-                  >
-                    <AiOutlineEye size={17} />
-                  </Button>
                   <Button
                     colorScheme="red"
                     variant={"solid"}
@@ -159,17 +176,13 @@ const DashboardProductsTable = () => {
                   </Button>
                 </Td>
               </Tr>
-            ))}
+            ))} */}
           </Tbody>
           <Tfoot>
             <Tr>
               <Th isNumeric>ID</Th>
               <Th>TITLE</Th>
-              <Th>CATEGORY</Th>
-              <Th>THUMBNAIL</Th>
-              <Th isNumeric>PRICE</Th>
-              <Th isNumeric>STOCK</Th>
-              <Th>ACTION</Th>
+              <Th isNumeric>ACTION</Th>
             </Tr>
           </Tfoot>
         </Table>
@@ -183,15 +196,15 @@ const DashboardProductsTable = () => {
         okTxt="Destroy"
         variant="outline"
         isLoading={isDestroying}
-        onOkHandler={() => destroyProduct(selectedProductId)}
+        onOkHandler={() => destroyProduct(selectedCategoryId)}
       />
 
-      <FormModal
-        clickedProduct={productToEdit}
+      <UpdateCategoryModal
+        clickedCategory={categoryToEdit}
         isOpen={isOpenModal}
         onCloseModal={onCloseModal}
       />
-      <CreateProductModal
+      <CreateCategoryModal
         isOpen={isOpenCreateModal}
         onCloseModal={onCloseCreateModal}
       />
@@ -199,4 +212,4 @@ const DashboardProductsTable = () => {
   );
 };
 
-export default DashboardProductsTable;
+export default DashboardCategoriesTable;

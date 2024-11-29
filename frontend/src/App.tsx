@@ -11,6 +11,7 @@ import CartDrawer from "./components/CartDrawer";
 import AdminDashboard from "./pages/dashboard";
 import DashboardLayout from "./Layout/DashboardLayout";
 import DashboardProductsPage from "./pages/dashboard/DashboardProducts";
+import DashboardCategoriesPage from "./pages/dashboard/DashboardCategoriesPage";
 
 function App() {
   const token = CookieService.get("jwt");
@@ -33,7 +34,10 @@ function App() {
             path="/dashboard/products"
             element={<DashboardProductsPage />}
           />
-          <Route path="/dashboard/categories" element={<>Catgory Page</>} />
+          <Route
+            path="/dashboard/categories"
+            element={<DashboardCategoriesPage />}
+          />
         </Route>
       </Routes>
     </>

@@ -6,7 +6,7 @@ class CookieService {
   get(name: string) {
     return cookies.get(name);
   }
-  set(name: string, value: string, options?: CookieSetOptions) {
+  set(name: string, value: string | number, options?: CookieSetOptions) {
     return cookies.set(name, value, options);
   }
   remove(name: string) {

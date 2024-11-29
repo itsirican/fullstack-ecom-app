@@ -83,6 +83,33 @@ export const productsApiSlice = createApi({
       },
       invalidatesTags: [{ type: "Products", id: "LIST" }],
     }),
+    createDashboardCategories: builder.mutation({
+      query: ({ body }) => ({
+        url: `/api/categories`,
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${CookieService.get("jwt")}`,
+        },
+        body: body,
+      }),
+      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          productsApiSlice.util.updateQueryData(
+            "getDashboardProducts",
+            id,
+            (draft) => {
+              Object.assign(draft, patch);
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+      invalidatesTags: [{ type: "Products", id: "LIST" }],
+    }),
 
     // ** PUT
     updateDashboardProducts: builder.mutation({
@@ -93,6 +120,33 @@ export const productsApiSlice = createApi({
           Authorization: `Bearer ${CookieService.get("jwt")}`,
         },
         body: body,
+      }),
+      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          productsApiSlice.util.updateQueryData(
+            "getDashboardProducts",
+            id,
+            (draft) => {
+              Object.assign(draft, patch);
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+      invalidatesTags: [{ type: "Products", id: "LIST" }],
+    }),
+    updateDashboardCategories: builder.mutation({
+      query: ({ id, body }) => ({
+        url: `/api/categories/${id}`,
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${CookieService.get("jwt")}`,
+        },
+        body: { body },
       }),
       async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
@@ -136,4 +190,6 @@ export const {
   useUpdateDashboardProductsMutation,
   useCreateDashboardProductsMutation,
   useGetDashboardCategoriesQuery,
+  useUpdateDashboardCategoriesMutation,
+  useCreateDashboardCategoriesMutation,
 } = productsApiSlice;

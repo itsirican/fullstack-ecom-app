@@ -34,7 +34,7 @@ interface IFile {
 
 export interface ICategory {
   id: number;
-  title?: string;
+  title: string;
 }
 
 export interface IAdminProduct {
