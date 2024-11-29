@@ -40,10 +40,6 @@ const FormModal = ({ isOpen, onCloseModal, clickedProduct }: IProps) => {
 
   useEffect(() => {
     if (isOpen) reset(clickedProduct);
-    else if (isSuccess) {
-      reset(clickedProduct);
-      onCloseModal();
-    }
   }, [isOpen]);
 
   useEffect(() => {
@@ -56,7 +52,6 @@ const FormModal = ({ isOpen, onCloseModal, clickedProduct }: IProps) => {
   const onSubmit: SubmitHandler<IAdminProduct> = async (
     data: IAdminProduct
   ) => {
-    console.log(data);
     const formData = new FormData();
     formData.append(
       "data",

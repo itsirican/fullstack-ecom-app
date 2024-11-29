@@ -28,6 +28,7 @@ import { AiOutlineEye } from "react-icons/ai";
 import { BsTrash } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import CustomAlertDialog from "../shared/AlertDialog";
+import CreateProductModal from "./CreateProductMOdal";
 
 const DashboardProductsTable = () => {
   const [selectedProductId, setSelectedProductId] = useState<number | null>(
@@ -42,6 +43,11 @@ const DashboardProductsTable = () => {
     onOpen: onOpenModal,
     onClose: onCloseModal,
   } = useDisclosure();
+  const {
+    isOpen: isOpenCreateModal,
+    onOpen: onOpenCreateModal,
+    onClose: onCloseCreateModal,
+  } = useDisclosure();
   const { isLoading, data } = useGetDashboardProductsQuery({ page: 1 });
   const [destroyProduct, { isLoading: isDestroying, isSuccess }] =
     useRemoveDashboardProductMutation();
@@ -54,16 +60,16 @@ const DashboardProductsTable = () => {
   }, [isSuccess]);
 
   if (isLoading) return <TableSkeleton />;
-
   return (
     <>
       <Button
         display={"flex"}
         ml={"auto"}
         mb={"10px"}
+        colorScheme="blue"
         onClick={() => {
-          console.log("clicked");
-          onOpenModal();
+          // console.log("clicked");
+          onOpenCreateModal();
         }}
       >
         Create
@@ -184,6 +190,11 @@ const DashboardProductsTable = () => {
         clickedProduct={productToEdit}
         isOpen={isOpenModal}
         onCloseModal={onCloseModal}
+      />
+      <CreateProductModal
+        userId={data.id}
+        isOpen={isOpenCreateModal}
+        onCloseModal={onCloseCreateModal}
       />
     </>
   );

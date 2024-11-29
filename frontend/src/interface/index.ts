@@ -38,7 +38,7 @@ export interface IAdminProduct {
   description: string;
   price: number;
   stock: number;
-  category: {
+  category?: {
     title: string;
   };
   thumbnail?:
