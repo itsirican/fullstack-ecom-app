@@ -32,15 +32,18 @@ interface IFile {
   webkitRelativePath: string;
 }
 
+export interface ICategory {
+  id: number;
+  title?: string;
+}
+
 export interface IAdminProduct {
   id: number;
   title: string;
   description: string;
   price: number;
   stock: number;
-  category?: {
-    title: string;
-  };
+  category: ICategory;
   thumbnail?:
     | {
         url: string;

@@ -27,7 +27,8 @@ export const defaultProductObj = {
   price: 0,
   stock: 0,
   category: {
-    title: "",
+    id: 0,
+    // title: "Select one",
   },
   thumbnail: {
     url: "",

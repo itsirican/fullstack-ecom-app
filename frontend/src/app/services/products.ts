@@ -34,6 +34,26 @@ export const productsApiSlice = createApi({
             ]
           : [{ type: "Products", id: "LIST" }],
     }),
+    getDashboardCategories: builder.query({
+      query: () => {
+        return {
+          url: `/api/users/me?populate=categories`,
+          headers: {
+            Authorization: `Bearer ${CookieService.get("jwt")}`,
+          },
+        };
+      },
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.categories.map(({ id }: IRequest) => ({
+                type: "Products",
+                id,
+              })),
+              { type: "Products", id: "LIST" },
+            ]
+          : [{ type: "Products", id: "LIST" }],
+    }),
 
     // ** CREATE
     createDashboardProducts: builder.mutation({
@@ -115,4 +135,5 @@ export const {
   useRemoveDashboardProductMutation,
   useUpdateDashboardProductsMutation,
   useCreateDashboardProductsMutation,
+  useGetDashboardCategoriesQuery,
 } = productsApiSlice;

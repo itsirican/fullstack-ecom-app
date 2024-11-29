@@ -28,7 +28,7 @@ import { AiOutlineEye } from "react-icons/ai";
 import { BsTrash } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import CustomAlertDialog from "../shared/AlertDialog";
-import CreateProductModal from "./CreateProductMOdal";
+import CreateProductModal from "./CreateProductModal";
 
 const DashboardProductsTable = () => {
   const [selectedProductId, setSelectedProductId] = useState<number | null>(

@@ -9,13 +9,17 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Select,
   Textarea,
 } from "@chakra-ui/react";
 import CustomModel from "../shared/Modal";
-import { IAdminProduct } from "../interface";
+import { IAdminProduct, ICategory } from "../interface";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useUpdateDashboardProductsMutation } from "../app/services/products";
+import {
+  useGetDashboardCategoriesQuery,
+  useUpdateDashboardProductsMutation,
+} from "../app/services/products";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { productFormSchema } from "../validation";
 
@@ -26,6 +30,8 @@ interface IProps {
 }
 
 const FormModal = ({ isOpen, onCloseModal, clickedProduct }: IProps) => {
+  const { isLoading: isLoadingCategories, data } =
+    useGetDashboardCategoriesQuery({});
   const [updateProduct, { isLoading, isSuccess }] =
     useUpdateDashboardProductsMutation();
 
@@ -60,6 +66,9 @@ const FormModal = ({ isOpen, onCloseModal, clickedProduct }: IProps) => {
         description: data.description,
         price: data.price,
         stock: data.stock,
+        category: {
+          id: data.category.id,
+        },
       })
     );
     if (data?.thumbnail) {
@@ -67,7 +76,7 @@ const FormModal = ({ isOpen, onCloseModal, clickedProduct }: IProps) => {
     }
     updateProduct({ id: data.id, body: formData });
   };
-
+  if (isLoadingCategories) return;
   return (
     <CustomModel
       isOpen={isOpen}
@@ -127,6 +136,17 @@ const FormModal = ({ isOpen, onCloseModal, clickedProduct }: IProps) => {
             p={2}
             {...register("thumbnail")}
           />
+        </FormControl>
+        <FormControl my={3} id="category" isInvalid={!!errors.category}>
+          <FormLabel>Category</FormLabel>
+          <Select {...register("category.id")}>
+            {data.categories.map((category: ICategory) => (
+              <option key={category.id} value={category.id}>
+                {category.title}
+              </option>
+            ))}
+          </Select>
+          <FormErrorMessage>{errors.category?.id?.message}</FormErrorMessage>
         </FormControl>
       </Box>
     </CustomModel>

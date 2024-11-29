@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -10,13 +9,17 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Select,
   Textarea,
 } from "@chakra-ui/react";
 import CustomModel from "../shared/Modal";
-import { IAdminProduct } from "../interface";
+import { IAdminProduct, ICategory } from "../interface";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useCreateDashboardProductsMutation } from "../app/services/products";
+import {
+  useCreateDashboardProductsMutation,
+  useGetDashboardCategoriesQuery,
+} from "../app/services/products";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { productFormSchema } from "../validation";
 import { defaultProductObj } from "../data";
@@ -30,6 +33,8 @@ interface IProps {
 const CreateProductModal = ({ isOpen, onCloseModal, userId }: IProps) => {
   const [createProduct, { isLoading, isSuccess }] =
     useCreateDashboardProductsMutation();
+  const { isLoading: isLoadingCategories, data } =
+    useGetDashboardCategoriesQuery({});
 
   const {
     register,
@@ -54,7 +59,7 @@ const CreateProductModal = ({ isOpen, onCloseModal, userId }: IProps) => {
   const onSubmit: SubmitHandler<IAdminProduct> = async (
     data: IAdminProduct
   ) => {
-    console.log(data);
+    // console.log(data);
     const formData = new FormData();
     formData.append(
       "data",
@@ -64,6 +69,9 @@ const CreateProductModal = ({ isOpen, onCloseModal, userId }: IProps) => {
         price: data.price,
         stock: data.stock,
         user: userId,
+        category: {
+          id: data.category.id,
+        },
       })
     );
     if (data?.thumbnail) {
@@ -71,6 +79,8 @@ const CreateProductModal = ({ isOpen, onCloseModal, userId }: IProps) => {
     }
     createProduct({ body: formData });
   };
+
+  if (isLoadingCategories) return;
 
   return (
     <CustomModel
@@ -130,6 +140,17 @@ const CreateProductModal = ({ isOpen, onCloseModal, userId }: IProps) => {
             p={2}
             {...register("thumbnail")}
           />
+        </FormControl>
+        <FormControl my={3} id="category" isInvalid={!!errors.category}>
+          <FormLabel>Category</FormLabel>
+          <Select {...register("category.id")}>
+            {data.categories.map((category: ICategory) => (
+              <option key={category.id} value={category.id}>
+                {category.title}
+              </option>
+            ))}
+          </Select>
+          <FormErrorMessage>{errors.category?.id?.message}</FormErrorMessage>
         </FormControl>
       </Box>
     </CustomModel>

@@ -10,10 +10,17 @@ export const loginSchema = yup
   })
   .required();
 
-export const productFormSchema = yup.object({
-  id: yup.number().required(),
-  title: yup.string().trim().required("Title is required."),
-  description: yup.string().trim().required("Description is required."),
-  price: yup.number().positive().required("Price is required"),
-  stock: yup.number().positive().required("Stock is required"),
-});
+export const productFormSchema = yup
+  .object({
+    id: yup.number().required(),
+    title: yup.string().trim().required("Title is required."),
+    description: yup.string().trim().required("Description is required."),
+    price: yup.number().positive().required("Price is required"),
+    stock: yup.number().positive().required("Stock is required"),
+    category: yup
+      .object({
+        id: yup.number().positive("Category is required.").required(),
+      })
+      .required(),
+  })
+  .required();
