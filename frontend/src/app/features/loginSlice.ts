@@ -66,6 +66,9 @@ const loginSlice = createSlice({
           const options = { path: "/", expires: date, httpOnly: false };
           CookieService.set("jwt", action.payload.jwt, options);
           CookieService.set("id", action.payload.user.id, options);
+          setTimeout(() => {
+            location.replace("/dashboard");
+          }, 2000);
         }
       )
       .addCase(userLogin.rejected, (state, action) => {

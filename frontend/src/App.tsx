@@ -12,6 +12,7 @@ import AdminDashboard from "./pages/dashboard";
 import DashboardLayout from "./Layout/DashboardLayout";
 import DashboardProductsPage from "./pages/dashboard/DashboardProducts";
 import DashboardCategoriesPage from "./pages/dashboard/DashboardCategoriesPage";
+import DashboardSettingsPage from "./pages/dashboard/DashboardSettingsPage";
 
 function App() {
   const token = CookieService.get("jwt");
@@ -28,7 +29,10 @@ function App() {
 
         <Route path="/login" element={<LoginPage isAuthenticated={token} />} />
 
-        <Route path="/dashboard" element={<DashboardLayout />}>
+        <Route
+          path="/dashboard"
+          element={<DashboardLayout isAuthenticated={token} />}
+        >
           <Route index element={<AdminDashboard />} />
           <Route
             path="/dashboard/products"
@@ -37,6 +41,10 @@ function App() {
           <Route
             path="/dashboard/categories"
             element={<DashboardCategoriesPage />}
+          />
+          <Route
+            path="/dashboard/settings"
+            element={<DashboardSettingsPage />}
           />
         </Route>
       </Routes>

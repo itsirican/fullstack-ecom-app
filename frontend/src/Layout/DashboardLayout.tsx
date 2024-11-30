@@ -32,7 +32,11 @@ import {
 } from "react-icons/fi";
 import { MdOutlineCategory } from "react-icons/md";
 import { IconType } from "react-icons";
-import { Outlet, NavLink as RouterLink } from "react-router-dom";
+import { Navigate, Outlet, NavLink as RouterLink } from "react-router-dom";
+
+interface IProps {
+  isAuthenticated: boolean;
+}
 
 interface LinkItemProps {
   to: string;
@@ -216,8 +220,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   );
 };
 
-const DashboardLayout = () => {
+const DashboardLayout = ({ isAuthenticated }: IProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  if (!isAuthenticated) return <Navigate to={"/products"} replace />;
 
   return (
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
