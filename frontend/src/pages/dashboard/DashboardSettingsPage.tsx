@@ -28,12 +28,14 @@ const DashboardSettingsPage = () => {
         >
           <Avatar
             size={"xl"}
+            cursor={"pointer"}
             src={
               "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
             }
             css={{
               border: "2px solid white",
             }}
+            onClick={() => console.log("clicked")}
           />
           <Heading
             fontSize={"2xl"}
@@ -52,7 +54,7 @@ const DashboardSettingsPage = () => {
           <FormLabel htmlFor="email" fontWeight={"normal"}>
             Email address
           </FormLabel>
-          <Input id="email" type="email" />
+          <Input id="email" type="email" disabled />
           <FormHelperText>We&apos;ll never share your email.</FormHelperText>
         </FormControl>
 
@@ -83,11 +85,7 @@ const DashboardSettingsPage = () => {
               type={show ? "text" : "password"}
               placeholder="Enter password"
             />
-            <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleClick}>
-                {show ? "Hide" : "Show"}
-              </Button>
-            </InputRightElement>
+            <InputRightElement width="4.5rem"></InputRightElement>
           </InputGroup>
         </FormControl>
         <Button mt={"20px"} mx={"auto"} colorScheme="green">
