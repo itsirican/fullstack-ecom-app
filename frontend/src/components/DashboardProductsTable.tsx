@@ -28,9 +28,9 @@ import { AiOutlineEye } from "react-icons/ai";
 import { BsTrash } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import CustomAlertDialog from "../shared/AlertDialog";
-import CreateProductModal from "./CreateProductModal";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
+import CreateProductModal from "./CreateProductModal";
 
 const DashboardProductsTable = () => {
   const { isOnline } = useSelector((state: RootState) => state.network);
