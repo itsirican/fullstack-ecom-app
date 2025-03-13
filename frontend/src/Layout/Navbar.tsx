@@ -13,6 +13,7 @@ import {
   useColorMode,
   Center,
   HStack,
+  Link,
 } from "@chakra-ui/react";
 import { BsMoon, BsSun } from "react-icons/bs";
 import { NavLink as RouterLink } from "react-router-dom";
@@ -107,7 +108,11 @@ export default function Navbar() {
                     </Center>
                     <br />
                     <MenuDivider />
-                    <MenuItem>Your Servers</MenuItem>
+                    <MenuItem>
+                      <Link as={RouterLink} to="/dashboard">
+                        Dashboard
+                      </Link>
+                    </MenuItem>
                     <MenuItem>Account Settings</MenuItem>
                     <MenuItem onClick={logoutHandler}>Logout</MenuItem>
                   </MenuList>
