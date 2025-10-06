@@ -24,7 +24,7 @@ const CartDrawerItem = ({ product: { id, attributes, qty } }: IProps) => {
         py={2}
       >
         <Image
-          src={`${import.meta.env.VITE_SERVER_URL}${thumbnail?.data?.attributes?.url}`}
+          src={`https://fullstack-ecom-app-1.onrender.com${thumbnail?.data?.attributes?.url}`}
           alt={title}
           w={"80px"}
           h={"80px"}

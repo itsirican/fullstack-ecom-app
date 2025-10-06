@@ -10,7 +10,7 @@ export const categoriesApiSlice = createApi({
   tagTypes: ["Categories"],
   refetchOnReconnect: true,
   refetchOnMountOrArgChange: true,
-  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_SERVER_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: `https://fullstack-ecom-app-1.onrender.com` }),
   endpoints: (builder) => ({
     // ** GET
     getDashboardCategories: builder.query({

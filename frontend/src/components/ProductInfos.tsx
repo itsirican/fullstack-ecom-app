@@ -11,7 +11,7 @@ const ProductInfos = ({ product: { attributes } }: IProps) => {
   return (
     <Box>
       <Image
-        src={`${import.meta.env.VITE_SERVER_URL}${thumbnail?.data?.attributes?.url}`}
+        src={`https://fullstack-ecom-app-1.onrender.com${thumbnail?.data?.attributes?.url}`}
         alt={title}
         boxSize={"200px"}
         borderRadius={"full"}

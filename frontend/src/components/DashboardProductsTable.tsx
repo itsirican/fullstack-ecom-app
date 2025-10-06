@@ -115,7 +115,7 @@ const DashboardProductsTable = () => {
                 <Td>{product.category?.title}</Td>
                 <Td>
                   <Image
-                    src={`${import.meta.env.VITE_SERVER_URL}${product.thumbnail?.url}`}
+                    src={`https://fullstack-ecom-app-1.onrender.com${product.thumbnail?.url}`}
                     alt={product.title}
                     w={"80px"}
                     h={"80px"}
