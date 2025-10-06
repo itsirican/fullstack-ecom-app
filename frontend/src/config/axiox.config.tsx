@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: `${import.meta.env.VITE_SERVER_URL}`,
+  baseURL: `https://fullstack-ecom-app-1.onrender.com`,
 });
 
 export default axiosInstance;
